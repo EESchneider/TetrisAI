@@ -1,0 +1,9 @@
+TODO:
+1. Write tetris framework, supporting block placement and movement
+    + Write Piece class
+    - Write Gamestate class
+    - Write Tree class (to hold Gamestate instances)
+        Methods include:
+            - Prune
+            - Find highest scoring leaf
+2. Create AI on said framework
