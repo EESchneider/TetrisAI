@@ -1,11 +1,3 @@
-//
-//  Gamestate.cpp
-//  TetrisAI
-//
-//  Created by Maxwell Schneider on 12/1/15.
-//  Copyright (c) 2015 Maxwell Schneider. All rights reserved.
-//
-
 #include <algorithm>
 #include "Gamestate.h"
 
@@ -57,6 +49,99 @@ Gamestate Gamestate::pass()
     Gamestate return_val = *this;
     return_val.move_down();
     return return_val;
+}
+
+Gamestate Gamestate::move_left()
+{
+    bool barrier = false;
+    for (int row_num = 0; row_num < current_piece.width; ++row_num)
+    {
+        for (int col_num = 0; col_num < current_piece.height; ++col_num)
+        {
+            if (board[row_num + 1 + current_piece_loc[0]][col_num + current_piece_loc[1]] && (*read_shape)[row_num][col_num])
+            {
+                barrier = true;
+                break; // Not necessary, but speeds things up
+            }
+        }
+    }
+    
+    if (barrier)
+    {
+        return pass();
+    }
+    else
+    {
+        Gamestate new_gamestate = *this;
+        new_gamestate.current_piece_loc += 1;
+    }
+}
+
+Gamestate Gamestate::move_right()
+{
+    bool barrier = false;
+    for (int row_num = 0; row_num < current_piece.width; ++row_num)
+    {
+        for (int col_num = 0; col_num < current_piece.height; ++col_num)
+        {
+            if (board[row_num + 1 + current_piece_loc[0]][col_num + current_piece_loc[1]] && (*read_shape)[row_num][col_num])
+            {
+                barrier = true;
+                break; // Not necessary, but speeds things up
+            }
+        }
+    }
+    
+    if (barrier)
+    {
+        return pass();
+    }
+    else
+    {
+        Gamestate new_gamestate = *this;
+        new_gamestate.current_piece_loc += 1;
+    }
+}
+
+Gamestate Gamestate::rotate_left()
+{
+    Gamestate new_gamestate = *this;
+    new_gamestate.current_piece.rotate_left();
+    for (int row_num = 0; row_num < new_gamestate.current_piece.width; ++row_num)
+    {
+        for (int col_num = 0; col_num < new_gamestate.current_piece.height; ++col_num)
+        {
+            if (board[row_num + new_gamestate.current_piece_loc[0]][col_num + new_gamestate.current_piece_loc[1]]
+                && new_gamestate.current_piece[row_num][col_num]) // No room to rotate into
+            {
+                return pass();
+            }
+        }
+    }
+    return new_gamestate;
+}
+
+Gamestate Gamestate::rotate_right()
+{
+    Gamestate new_gamestate = *this;
+    new_gamestate.current_piece.rotate_right();
+    for (int row_num = 0; row_num < new_gamestate.current_piece.width; ++row_num)
+    {
+        for (int col_num = 0; col_num < new_gamestate.current_piece.height; ++col_num)
+        {
+            if (board[row_num + new_gamestate.current_piece_loc[0]][col_num + new_gamestate.current_piece_loc[1]]
+                && new_gamestate.current_piece[row_num][col_num]) // No room to rotate into
+            {
+                return pass();
+            }
+        }
+    }
+    return new_gamestate;
+}
+
+Gamestate Gamestate::hard_drop()
+{
+    
 }
 
 const shape_t pieces::I = {{false, false, false, false},
